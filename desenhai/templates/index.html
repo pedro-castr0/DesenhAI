@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>DesenhAI ✏️</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    footer {
+      margin-top: 50px;
+      padding: 20px;
+      width: 100%;
+      text-align: center;
+      background-color: #1a1a1a;
+      border-top: 1px solid #333;
+      color: #aaa;
+      font-size: 0.9rem;
+      border-radius: 10px;
+    }
+
+    footer a {
+      color: pink;
+      font-weight: bold;
+    }
+
+    a:hover {
+      color: #ff8ac0;
+    }
+
+    a {
+      text-decoration: none;
+      color: pink;
+    }
+
+    a:visited {
+      text-decoration: none;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+    }
+    sup {
+      font-size: 10px;
+    }
+
+    h1 {
+      margin-top: -10px;
+      margin-bottom: 20px;
+      font-size: 2rem;
+      color: #fff;
+    }
+
+    h2 {
+      margin-top: 30px;
+      font-size: 1.5rem;
+      color: #fff;
+    }
+
+    h3 {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    .container {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      max-width: 1920px;
+    }
+
+    canvas {
+      border: 1px solid #333;
+      background-color: black;
+      cursor: crosshair;
+      border-radius: 10px;
+    }
+
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      background-color: #d13333;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #fff;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #f85c5c;
+    }
+
+    #results {
+      min-width: 300px;
+      background-color: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #333;
+      font-size: 1rem;
+      white-space: pre-line;
+    }
+
+    #information {
+      max-width: 600px;
+      background-color: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #333;
+      font-size: 1rem;
+      white-space: pre-line;
+      text-align: justify;
+
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #information {
+        order: -1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="information">
+      <p><h1>DesenhAI ✏️ - Projeto Integrador II</h1><sup><b>2024.2</b></sup></p>
+      Olá! Ficamos felizes que você tenha optado por testar a nossa aplicação.<br><br>
+      Em nossos testes, percebemos que a versão web do projeto não é tão eficiente em suas previsões quanto a versão original (offline). Recomendamos que, se você estiver interessado em compreender melhor como nossa aplicação funciona — ou quiser uma experiência mais precisa —, visite nosso <b><a href="https://github.com/pedro-castr0/projeto-integrador-20242" target="_blank">repositório no GitHub</a></b>. Ambos os arquivos disponíveis funcionam (desde que as bibliotecas estejam corretamente instaladas), mas sugerimos utilizar o projeto contido na pasta "<b>reconhecimento-desenho-3-0</b>", que é a versão mais recente e refinada.
+      
+      <h2 >Opções de desenho</h2>
+      Atualmente, nossa aplicação é capaz de reconhecer 20 categorias de desenhos. Essa quantidade foi definida devido ao tempo necessário para o treinamento adequado de cada classe. Abaixo, você pode conferir a lista completa de categorias reconhecidas:
+      <ul>
+        <li><b>Abelha</b></li>
+        <li><b>Árvore</b></li>
+        <li><b>Avião</b></li>
+        <li><b>Bicicleta</b></li>
+        <li><b>Bola de basquete</b></li>
+        <li><b>Cachorro</b></li>
+        <li><b>Caracol</b></li>
+        <li><b>Casa</b></li>
+        <li><b>Círculo</b></li>
+        <li><b>Flor</b></li>
+        <li><b>Formiga</b></li>
+        <li><b>Gato</b></li>
+        <li><b>Machado</b></li>
+        <li><b>Maçã</b></li>
+        <li><b>Pássaro</b></li>
+        <li><b>Quadrado</b></li>
+        <li><b>Relógio</b></li>
+        <li><b>Rosquinha</b></li>
+        <li><b>Rosto sorridente</b></li>
+        <li><b>Torre Eiffel</b></li>
+      </ul>
+
+      <h2>Possíveis problemas</h2>
+
+      <h3>Previsão e imprecisões</h3>
+      Pode não parecer, mas aplicações que analisam imagens e entregam resultados com base em sua interpretação demandam muitos dados. Mesmo com milhares de imagens por classe, ainda há uma margem de erro considerável. A acurácia atual do nosso modelo é de <b>85,3%</b>, mesmo com mais de 10.000 imagens por classe, todas retiradas do <b><a href="https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/binary?pageState=(%22StorageObjectListTable%22:(%22f%22:%22%255B%255D%22))&inv=1&invt=AbzAUA" target="_blank">DataSet</a></b> do jogo <b><a href="https://quickdraw.withgoogle.com/" target="_blank">QuickDraw</a></b>, desenvolvido por uma equipe do Google.
+
+      <h3>Execução do projeto localmente</h3>
+      Antes de executar o arquivo principal, certifique-se de que você instalou a última versão do <b><a href="https://www.python.org/downloads/" target="_blank">Python</a></b>, o gerenciador de pacotes <b><a href="https://pypi.org/project/pip/" target="_blank">PIP</a></b> e as seguintes bibliotecas:
+        <ul>
+          <li><b><a href="https://pypi.org/project/numpy/" target="_blank">Numpy</a></b></li>
+          <li><b><a href="https://pypi.org/project/pillow/" target="_blank">Pillow</a></b></li>
+          <li><b><a href="https://pypi.org/project/customtkinter/" target="_blank">CustomTkinter</a></b></li>
+          <li><b><a href="https://pypi.org/project/torch/" target="_blank">PyTorch</a></b></li>
+          <li><b><a href="https://pypi.org/project/scikit-learn/" target="_blank">Scikit-learn</a></b></li>
+        </ul>
+    </div>
+
+    <div>
+      <canvas id="canvas" width="600" height="600"></canvas>
+      <div class="controls">
+        <button onclick="clearCanvas()"><b>Limpar</b></button>
+      </div>
+    </div>
+
+    <div id="results">
+    </div>
+  </div>
+
+  <footer>
+    <p>Aplicação desenvolvida para a matéria Projeto Integrador II <sup>2024.2</sup> | <a href="https://github.com/pedro-castr0" target="_blank">GitHub</a>
+    </p>
+  </footer>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    let painting = false;
+
+    canvas.addEventListener('mousedown', () => painting = true);
+    canvas.addEventListener('mouseup', () => painting = false);
+    canvas.addEventListener('mouseleave', () => painting = false);
+    canvas.addEventListener('mousemove', draw);
+
+    function draw(e) {
+      if (!painting) return;
+      ctx.fillStyle = "white";
+      ctx.beginPath();
+      ctx.arc(e.offsetX, e.offsetY, 20, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function clearCanvas() {
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      document.getElementById("results").innerHTML = formatEmptyResults();
+    }
+
+    function sendImage() {
+      canvas.toBlob(blob => {
+        const formData = new FormData();
+        formData.append('image', blob, 'drawing.png');
+
+        fetch('/predict', {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.error) {
+            document.getElementById("results").innerHTML = `<p style="color:red;">${data.error}</p>`;
+            return;
+          }
+
+          const sorted = data.predictions.sort((a, b) => a.class.localeCompare(b.class));
+          const output = sorted
+            .map(p => `${p.class}: ${(p.probability * 100).toFixed(2)}%`)
+            .join("\n");
+
+          document.getElementById("results").innerHTML = output;
+        });
+      }, 'image/png');
+    }
+
+    setInterval(sendImage, 50);
+
+    function formatEmptyResults() {
+      const classes = [
+        'Abelha', 'Árvore', 'Avião', 'Bicicleta', 'Bola de basquete', 'Cachorro', 'Caracol', 'Casa', 'Círculo', 'Flor', 'Formiga', 'Gato', 'Maçã', 'Machado', 'Pássaro', 'Quadrado',
+        'Relógio', 'Rosquinha', 'Rosto sorridente', 'Torre Eiffel'
+      ];
+      return classes.map(c => `${c}: 0.00%`).join("\n");
+    }
+
+    document.getElementById("results").innerHTML = formatEmptyResults();
+  </script>
+</body>
+</html>
